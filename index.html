@@ -9,6 +9,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Translate API Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en', // Original language of the page
+                includedLanguages: 'en,hi,gu', // English, Hindi, Gujarati
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE // Simple inline layout
+            }, 'google_translate_element'); // ID of the div where the widget will be placed
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <!-- Chosen Palette: Warm Neutrals with Teal Accent -->
     <!-- Application Structure Plan: A single-page dashboard design with a fixed sidebar for navigation on larger screens (collapsing to a top menu on mobile). This structure was chosen to break down the dense report into user-centric, thematic sections (e.g., Services, Expertise, Practical Info), allowing non-linear exploration. A prospective patient can immediately access contact/fee info, while a referring physician can focus on services and expertise. This prioritizes usability and quick access to relevant information over the linear flow of the source report. Key interactions include service category filters, a dynamic ratings chart, and accordion-style content reveals to manage information density. -->
     <!-- Visualization & Content Choices: 
@@ -28,13 +41,28 @@
         .service-btn-inactive { background-color: #f0fdfa; color: #134e4a; }
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Style for the Google Translate widget to push it down slightly from the fixed mobile header */
+        /* Note: Google Translate injects an iframe, so styling it directly with Tailwind is limited. */
+        #google_translate_element {
+            margin-bottom: 1rem; /* Space below the widget */
+            padding-top: 1rem; /* Push it down from any fixed header */
+            background-color: #F8F7F4; /* Match body background */
+            position: sticky; /* Make it sticky as you scroll in main area */
+            top: 0; /* Stick to the top of the main area */
+            z-index: 40; /* Ensure it's above other scrolling content but below main fixed header */
+        }
+        @media (min-width: 1024px) { /* On large screens, no need for top padding as it's below sidebar */
+            #google_translate_element {
+                padding-top: 0;
+            }
+        }
     </style>
 </head>
 <body class="bg-[#F8F7F4] text-gray-800">
     <div class="flex min-h-screen">
         <!-- Desktop Sidebar Navigation -->
         <aside class="w-64 bg-teal-800 text-white p-6 hidden lg:flex flex-col fixed h-full">
-            <h1 class="text-2xl font-bold mb-8">Dr. Anoop L. Sinha</h1>
+            <h1 class="text-2xl font-bold mb-8">Dr. Anoop Lal Sinha</h1> <!-- Changed from Dr. Anoop L. Sinha -->
             <nav id="desktop-nav" class="flex flex-col space-y-4">
                 <a href="#overview" class="p-2 rounded hover:bg-teal-700 transition-colors">Overview</a>
                 <a href="#services" class="p-2 rounded hover:bg-teal-700 transition-colors">Medical Services</a>
@@ -42,7 +70,7 @@
                 <a href="#experience" class="p-2 rounded hover:bg-teal-700 transition-colors">Patient Experience</a>
                 <a href="#practical" class="p-2 rounded hover:bg-teal-700 transition-colors">Practical Info</a>
                 <a href="#recommendations" class="p-2 rounded hover:bg-teal-700 transition-colors">Recommendations</a>
-                <!-- New Health Resources section and sub-links -->
+                <!-- Health Resources section for desktop -->
                 <h3 class="text-lg font-semibold text-teal-200 mt-4 mb-2">Health Resources</h3>
                 <a href="#cancer-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Cancer</a>
                 <a href="#vascular-veins-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Vascular Veins</a>
@@ -51,13 +79,15 @@
                 <a href="#diabetes-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Diabetes</a>
                 <a href="#breast-cancer-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Breast Cancer</a>
                 <a href="#tumor-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Tumor</a>
+                <!-- New Contact Info link -->
+                <a href="#contact-footer" class="p-2 rounded hover:bg-teal-700 transition-colors mt-4">Contact Information</a>
             </nav>
         </aside>
 
         <!-- Mobile Header and Navigation -->
         <div class="lg:hidden w-full bg-teal-800 text-white p-4 fixed top-0 left-0 z-50 shadow-md">
             <div class="flex justify-between items-center">
-                <h1 class="text-xl font-bold">Dr. Anoop L. Sinha</h1>
+                <h1 class="text-xl font-bold">Dr. Anoop Lal Sinha</h1> <!-- Changed from Dr. Anoop L. Sinha -->
                 <button id="mobile-menu-btn" class="p-2 focus:outline-none">
                     <span class="block w-6 h-0.5 bg-white mb-1"></span>
                     <span class="block w-6 h-0.5 bg-white mb-1"></span>
@@ -71,7 +101,7 @@
                 <a href="#experience" class="block p-2 rounded hover:bg-teal-700 transition-colors">Patient Experience</a>
                 <a href="#practical" class="block p-2 rounded hover:bg-teal-700 transition-colors">Practical Info</a>
                 <a href="#recommendations" class="block p-2 rounded hover:bg-teal-700 transition-colors">Recommendations</a>
-                <!-- New Health Resources section and sub-links for mobile -->
+                <!-- Health Resources section and sub-links for mobile -->
                 <h3 class="text-base font-semibold text-teal-200 mt-4 pt-2 border-t border-teal-700">Health Resources</h3>
                 <a href="#cancer-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Cancer</a>
                 <a href="#vascular-veins-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Vascular Veins</a>
@@ -80,11 +110,16 @@
                 <a href="#diabetes-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Diabetes</a>
                 <a href="#breast-cancer-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Breast Cancer</a>
                 <a href="#tumor-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Tumor</a>
+                <!-- New Contact Info link -->
+                <a href="#contact-footer" class="block p-2 rounded hover:bg-teal-700 transition-colors mt-4">Contact Information</a>
             </nav>
         </div>
         
         <!-- Main Content Area -->
         <main class="flex-1 lg:ml-64 p-6 md:p-10 mt-20 lg:mt-0">
+            <!-- Google Translate Widget Container -->
+            <div id="google_translate_element"></div>
+
             <!-- Overview Section -->
             <section id="overview" class="mb-12 fade-in">
                 <h2 class="text-3xl font-bold text-teal-900 mb-2">Dr. Anoop Lal Sinha</h2>
@@ -363,6 +398,39 @@
                     </div>
                 </div>
             </section>
+
+            ---
+            <!-- New Contact Information Section at the very bottom -->
+            <section id="contact-footer" class="py-10 bg-teal-900 text-white rounded-lg shadow-md fade-in">
+                <div class="max-w-4xl mx-auto px-6 md:px-10">
+                    <h2 class="text-3xl font-bold mb-6 text-center text-teal-100">Contact Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-teal-200 mb-4">Vishal Hospital</h3>
+                            <address class="not-italic text-teal-50 space-y-2">
+                                <p><strong>Address:</strong> Vishal Hospital, Kailashwadi Main Road, opposite Taluka Police Choki, Junction Plot, Rajkot, Gujarat 360001</p>
+                                <p class="flex items-center">
+                                    <strong>Mobile Number:</strong> <span id="hospital-mobile">9228105245</span> 
+                                    <button data-copy="hospital-mobile" class="ml-2 text-xs bg-teal-700 px-2 py-1 rounded hover:bg-teal-600 text-white">Copy</button>
+                                </p>
+                                <p><strong>Landline Number:</strong> 0281-2450408</p>
+                                <p><strong>Website:</strong> <a href="https://vishalhospitalrajkot.github.io/" target="_blank" class="text-teal-200 hover:underline">vishalhospitalrajkot.github.io</a></p>
+                            </address>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-teal-200 mb-4">Vishal Banquet Hall</h3>
+                            <address class="not-italic text-teal-50 space-y-2">
+                                <p><strong>Address:</strong> Vishal Banquet Hall, Gaya-Dobhi Rd, Musatpura, Bihar 823004</p>
+                                <p class="flex items-center">
+                                    <strong>Mobile Number:</strong> <span id="banquet-mobile">9228105245</span> 
+                                    <button data-copy="banquet-mobile" class="ml-2 text-xs bg-teal-700 px-2 py-1 rounded hover:bg-teal-600 text-white">Copy</button>
+                                </p>
+                                <p><strong>Website:</strong> <a href="https://vishalbanquethall1.github.io/" target="_blank" class="text-teal-200 hover:underline">vishalbanquethall1.github.io</a></p>
+                            </address>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
     
@@ -498,7 +566,7 @@
             }
         });
         
-        // Add functionality to "Copy" buttons
+        // Add functionality to "Copy" buttons (updated to include new contact numbers)
         document.querySelectorAll('[data-copy]').forEach(button => {
             button.addEventListener('click', () => {
                 const id = button.dataset.copy;
