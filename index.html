@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Anoop Lal Sinha | General Surgeon, Rajkot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Teal Accent -->
+    <!-- Application Structure Plan: A single-page dashboard design with a fixed sidebar for navigation on larger screens (collapsing to a top menu on mobile). This structure was chosen to break down the dense report into user-centric, thematic sections (e.g., Services, Expertise, Practical Info), allowing non-linear exploration. A prospective patient can immediately access contact/fee info, while a referring physician can focus on services and expertise. This prioritizes usability and quick access to relevant information over the linear flow of the source report. Key interactions include service category filters, a dynamic ratings chart, and accordion-style content reveals to manage information density. -->
+    <!-- Visualization & Content Choices: 
+        - Professional Profile: Goal(Inform) -> Stat Cards (HTML/Tailwind) -> Hover effects -> Justification(Quick, scannable highlights of experience/qualifications).
+        - Services Offered: Goal(Organize/Explore) -> Filterable Lists (JS) -> Clickable category buttons to show/hide services -> Justification(Manages the very long list of services, making it easy for users to find relevant treatments without overwhelming scrolling).
+        - Patient Ratings: Goal(Compare/Inform) -> Bar Chart (Chart.js/Canvas) -> Interactive tooltips on hover -> Justification(Visually represents disparate rating data from the report, offering a more immediate and compelling summary than a table).
+        - Notable Case/Testimonials: Goal(Build Trust) -> Styled Content Blocks/Cards -> Accordion/toggle for details -> Justification(Spotlights the key surgical achievement and powerful testimonials, separating them from routine text to increase impact).
+        - Practical Information: Goal(Actionable Info) -> Structured Lists/Cards -> "Copy to Clipboard" buttons (JS) -> Justification(Enhances usability by making contact details easily transferable for the user).
+        - Recommendations: Goal(Advise) -> Accordion Sections (HTML/JS) -> Click to expand -> Justification(Organizes advice for different audiences (patients, physicians) cleanly, preventing a wall of text).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        @media (max-width: 768px) { .chart-container { height: 300px; max-height: 350px; } }
+        .service-btn-active { background-color: #0d9488; color: #ffffff; }
+        .service-btn-inactive { background-color: #f0fdfa; color: #134e4a; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-[#F8F7F4] text-gray-800">
+    <div class="flex min-h-screen">
+        <!-- Desktop Sidebar Navigation -->
+        <aside class="w-64 bg-teal-800 text-white p-6 hidden lg:flex flex-col fixed h-full">
+            <h1 class="text-2xl font-bold mb-8">Dr. Anoop L. Sinha</h1>
+            <nav id="desktop-nav" class="flex flex-col space-y-4">
+                <a href="#overview" class="p-2 rounded hover:bg-teal-700 transition-colors">Overview</a>
+                <a href="#services" class="p-2 rounded hover:bg-teal-700 transition-colors">Medical Services</a>
+                <a href="#expertise" class="p-2 rounded hover:bg-teal-700 transition-colors">Expertise & Cases</a>
+                <a href="#experience" class="p-2 rounded hover:bg-teal-700 transition-colors">Patient Experience</a>
+                <a href="#practical" class="p-2 rounded hover:bg-teal-700 transition-colors">Practical Info</a>
+                <a href="#recommendations" class="p-2 rounded hover:bg-teal-700 transition-colors">Recommendations</a>
+                <!-- New Health Resources section and sub-links -->
+                <h3 class="text-lg font-semibold text-teal-200 mt-4 mb-2">Health Resources</h3>
+                <a href="#cancer-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Cancer</a>
+                <a href="#vascular-veins-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Vascular Veins</a>
+                <a href="#blood-pressure-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Blood Pressure</a>
+                <a href="#healthy-shaadi-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Pre-Marital Health Check</a>
+                <a href="#diabetes-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Diabetes</a>
+                <a href="#breast-cancer-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Breast Cancer</a>
+                <a href="#tumor-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Tumor</a>
+            </nav>
+        </aside>
+
+        <!-- Mobile Header and Navigation -->
+        <div class="lg:hidden w-full bg-teal-800 text-white p-4 fixed top-0 left-0 z-50 shadow-md">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold">Dr. Anoop L. Sinha</h1>
+                <button id="mobile-menu-btn" class="p-2 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-white mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-white mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-white"></span>
+                </button>
+            </div>
+            <nav id="mobile-nav" class="hidden mt-4 flex flex-col space-y-2">
+                <a href="#overview" class="block p-2 rounded hover:bg-teal-700 transition-colors">Overview</a>
+                <a href="#services" class="block p-2 rounded hover:bg-teal-700 transition-colors">Medical Services</a>
+                <a href="#expertise" class="block p-2 rounded hover:bg-teal-700 transition-colors">Expertise & Cases</a>
+                <a href="#experience" class="block p-2 rounded hover:bg-teal-700 transition-colors">Patient Experience</a>
+                <a href="#practical" class="block p-2 rounded hover:bg-teal-700 transition-colors">Practical Info</a>
+                <a href="#recommendations" class="block p-2 rounded hover:bg-teal-700 transition-colors">Recommendations</a>
+                <!-- New Health Resources section and sub-links for mobile -->
+                <h3 class="text-base font-semibold text-teal-200 mt-4 pt-2 border-t border-teal-700">Health Resources</h3>
+                <a href="#cancer-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Cancer</a>
+                <a href="#vascular-veins-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Vascular Veins</a>
+                <a href="#blood-pressure-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Blood Pressure</a>
+                <a href="#healthy-shaadi-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Pre-Marital Health Check</a>
+                <a href="#diabetes-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Diabetes</a>
+                <a href="#breast-cancer-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Breast Cancer</a>
+                <a href="#tumor-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Tumor</a>
+            </nav>
+        </div>
+        
+        <!-- Main Content Area -->
+        <main class="flex-1 lg:ml-64 p-6 md:p-10 mt-20 lg:mt-0">
+            <!-- Overview Section -->
+            <section id="overview" class="mb-12 fade-in">
+                <h2 class="text-3xl font-bold text-teal-900 mb-2">Dr. Anoop Lal Sinha</h2>
+                <p class="text-xl text-gray-600 mb-6">General Surgeon at Vishal Hospital, Rajkot</p>
+                <div class="max-w-4xl bg-white p-6 rounded-lg shadow-sm">
+                   <p class="text-gray-700 leading-relaxed mb-6">
+                        This interactive profile provides a comprehensive overview of Dr. Anoop Lal Sinha, a highly experienced General Surgeon leading Vishal Hospital in Rajkot, Gujarat. The application is designed to help prospective patients and referring physicians easily explore his qualifications, the hospital's extensive services, key clinical achievements, and overall patient satisfaction. The information is structured to prioritize clarity and ease of navigation, moving beyond a traditional report format to deliver actionable insights into his practice.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-teal-50 p-4 rounded-lg">
+                            <h3 class="text-3xl font-bold text-teal-800">19</h3>
+                            <p class="text-teal-900 font-medium">Years of Experience</p>
+                        </div>
+                        <div class="bg-teal-50 p-4 rounded-lg">
+                            <h3 class="text-2xl font-bold text-teal-800">MS</h3>
+                            <p class="text-teal-900 font-medium">General Surgery</p>
+                        </div>
+                        <div class="bg-teal-50 p-4 rounded-lg">
+                            <h3 class="text-2xl font-bold text-teal-800">2006</h3>
+                            <p class="text-teal-900 font-medium">Vishal Hospital Estd.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Medical Services Section -->
+            <section id="services" class="mb-12 fade-in">
+                <h2 class="text-3xl font-bold text-teal-900 mb-2">Medical Services</h2>
+                <p class="text-gray-600 mb-6 max-w-4xl">
+                    Explore the wide range of medical and surgical services offered at Vishal Hospital. This facility operates as a comprehensive local healthcare hub, addressing everything from complex surgeries to chronic disease management. Select a category below to view specific treatments and conditions addressed.
+                </p>
+                <div id="services-container" class="max-w-4xl bg-white p-6 rounded-lg shadow-sm">
+                    <div class="flex flex-wrap gap-2 mb-6">
+                    </div>
+                    <div id="services-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Clinical Expertise & Notable Cases Section -->
+            <section id="expertise" class="mb-12 fade-in">
+                <h2 class="text-3xl font-bold text-teal-900 mb-2">Clinical Expertise & Notable Cases</h2>
+                <p class="text-gray-600 mb-6 max-w-4xl">
+                    Dr. Sinha's professional reputation is built on a foundation of proven surgical skill and positive patient outcomes. This section highlights a landmark surgical achievement that demonstrates his ability to handle complex and challenging cases, alongside direct testimonials from patients who have experienced his care firsthand.
+                </p>
+                <div class="max-w-4xl space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Spotlight Case: A Remarkable Surgical Achievement</h3>
+                        <p class="text-gray-700 mb-4">In 2006, Dr. Sinha successfully removed an ovarian cyst of extraordinary size—weighing <strong>10.5 kg</strong> and measuring <strong>30 cm x 13 cm</strong>. The 90-minute operation was notable not only for the tumor's dimensions but also because the 47-year-old patient had been asymptomatic. Dr. Sinha described it as a "truly remarkable, even challenging, case," providing concrete evidence of his advanced surgical skills and sound clinical judgment.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Patient Testimonial</h3>
+                        <blockquote class="border-l-4 border-teal-500 pl-4 italic text-gray-700">
+                            "He is an experienced surgeon. I have done surgery at a very minimal cost with 100% positive result. I went from Pune to Rajkot for my operation from my friend's reference and now I have a good result."
+                            <footer class="mt-2 not-italic text-sm font-semibold text-gray-600">- Bhavesh Shah, Patient (Aug 2015)</footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Patient Experience & Reputation Section -->
+            <section id="experience" class="mb-12 fade-in">
+                   <h2 class="text-3xl font-bold text-teal-900 mb-2">Patient Experience & Reputation</h2>
+                   <p class="text-gray-600 mb-6 max-w-4xl">
+                    Patient feedback provides valuable insight into the quality of care and operational excellence at Vishal Hospital. While specific reviews for Dr. Sinha are consolidated with the hospital's reputation, recurring themes point to a consistently positive experience. The chart below visualizes available ratings, followed by a summary of key satisfaction drivers.
+                </p>
+                <div class="max-w-4xl bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-bold text-teal-900 mb-4 text-center">Online Ratings Overview</h3>
+                    <div class="chart-container">
+                        <canvas id="ratingsChart"></canvas>
+                    </div>
+                    <div class="mt-8">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Key Themes in Patient Satisfaction</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-teal-50 p-4 rounded-lg flex items-center">
+                                <span class="text-teal-600 text-2xl mr-3">✓</span>
+                                <p class="text-teal-900">Easy Accessibility & Connectivity</p>
+                            </div>
+                            <div class="bg-teal-50 p-4 rounded-lg flex items-center">
+                                <span class="text-teal-600 text-2xl mr-3">✓</span>
+                                <p class="text-teal-900">Clean & Hygienic Environment</p>
+                            </div>
+                            <div class="bg-teal-50 p-4 rounded-lg flex items-center">
+                                <span class="text-teal-600 text-2xl mr-3">✓</span>
+                                <p class="text-teal-900">Attentive Staff & Great Service</p>
+                            </div>
+                            <div class="bg-teal-50 p-4 rounded-lg flex items-center">
+                                <span class="text-teal-600 text-2xl mr-3">✓</span>
+                                <p class="text-teal-900">Accurate Diagnosis & Gentle Care</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Practical Information Section -->
+            <section id="practical" class="mb-12 fade-in">
+                <h2 class="text-3xl font-bold text-teal-900 mb-2">Practical Information</h2>
+                <p class="text-gray-600 mb-6 max-w-4xl">
+                    This section provides all the necessary details for scheduling a visit or getting in touch with Vishal Hospital. Find contact numbers, location, operating hours, and consultation fees below. Please note the payment model and always verify operating hours directly with the hospital.
+                </p>
+                <div class="max-w-4xl bg-white p-6 rounded-lg shadow-sm grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold text-teal-900 mb-4">Contact & Location</h3>
+                        <p class="font-semibold">Vishal Hospital</p>
+                        <p class="text-gray-700">Kailashwadi Main Road, Opp. Taluka Police Choki, Junction Plot, Rajkot, Gujarat 360001</p>
+                        <div class="mt-4 space-y-2">
+                            <p class="flex items-center"><strong>Mobile:</strong> <span id="phone" class="text-gray-700">9228105245</span> <button data-copy="phone" class="ml-2 text-xs bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">Copy</button></p>
+                            <p class="flex items-center"><strong>Email:</strong> <span id="email" class="text-gray-700">vishalhospital@hotmail.co.in</span> <button data-copy="email" class="ml-2 text-xs bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">Copy</button></p>
+                            <p class="flex items-center"><strong>Website:</strong> <a href="http://vishalhospitalrajkot.github.io" target="_blank" class="text-teal-700 hover:underline">vishalhospitalrajkot.github.io</a></p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-teal-900 mb-4">Hours & Fees</h3>
+                        <div class="space-y-2 text-gray-700">
+                               <p><strong>Mon - Sat:</strong> 09:00 AM - 12:00 PM & 05:00 PM - 08:00 PM</p>
+                               <p><em class="text-sm">Note: Hours may vary. Direct confirmation is advised.</em></p>
+                               <div class="flex items-baseline mt-4">
+                                 <p class="text-3xl font-bold text-teal-800">₹500</p>
+                                 <p class="ml-2 text-gray-600">In-Clinic Consultation</p>
+                               </div>
+                        </div>
+                        <div class="mt-4">
+                               <h4 class="font-semibold text-teal-900">Payment Model</h4>
+                               <p class="text-gray-700 text-sm">Primarily a direct payment model. Accepts digital payments (PhonePe, Google Pay). Inquire about insurance reimbursement procedures.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Key Takeaways & Recommendations Section -->
+            <section id="recommendations" class="mb-12 fade-in">
+                <h2 class="text-3xl font-bold text-teal-900 mb-2">Key Takeaways & Recommendations</h2>
+                   <p class="text-gray-600 mb-6 max-w-4xl">
+                    Based on the comprehensive analysis, this final section offers tailored recommendations for different groups. These insights aim to help patients make informed decisions and guide potential improvements for the hospital's management.
+                </p>
+                <div class="max-w-4xl space-y-4">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <button class="accordion-header w-full text-left p-4 flex justify-between items-center bg-teal-50 hover:bg-teal-100 rounded-t-lg">
+                            <span class="font-bold text-teal-900">For Prospective Patients</span>
+                            <span class="font-bold text-2xl text-teal-600 transform transition-transform">+</span>
+                        </button>
+                        <div class="accordion-content hidden p-4 border-t border-teal-200">
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li><strong>Verify Hours:</strong> Always call ahead to confirm operating hours due to inconsistencies on online platforms.</li>
+                                <li><strong>Prepare for Payment:</strong> Be prepared for a direct payment model. Clarify insurance reimbursement procedures with the hospital and your provider beforehand.</li>
+                                <li><strong>Trust in Reputation:</strong> The consistent positive feedback on care quality, hygiene, and affordability is a strong indicator of patient satisfaction.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <button class="accordion-header w-full text-left p-4 flex justify-between items-center bg-teal-50 hover:bg-teal-100 rounded-t-lg">
+                            <span class="font-bold text-teal-900">For Referring Physicians</span>
+                            <span class="font-bold text-2xl text-teal-600 transform transition-transform">+</span>
+                        </button>
+                        <div class="accordion-content hidden p-4 border-t border-teal-200">
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li><strong>Surgical Referrals:</strong> Dr. Sinha's demonstrated skill in complex cases makes Vishal Hospital a suitable referral for general surgical needs.</li>
+                                <li><strong>Comprehensive Care:</strong> The hospital's broad service spectrum allows for referrals beyond surgery, covering many common and chronic conditions.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <button class="accordion-header w-full text-left p-4 flex justify-between items-center bg-teal-50 hover:bg-teal-100 rounded-t-lg">
+                            <span class="font-bold text-teal-900">For Hospital Management</span>
+                            <span class="font-bold text-2xl text-teal-600 transform transition-transform">+</span>
+                        </button>
+                        <div class="accordion-content hidden p-4 border-t border-teal-200">
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li><strong>Digital Consistency:</strong> Standardize all online information (especially operating hours) across platforms like Justdial, Lybrate, and the official website to avoid patient confusion.</li>
+                                <li><strong>Enhance Transparency:</strong> Clearly state the hospital's accepted insurance policies and payment models online to manage patient expectations.</li>
+                                <li><strong>Promote Value:</strong> Continue to market the core value proposition of high-quality, affordable care, as this is a key competitive advantage.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Health Resources Section -->
+            <section id="health-resources" class="mb-12 fade-in">
+                <h2 class="text-3xl font-bold text-teal-900 mb-2">Health Resources</h2>
+                <p class="text-gray-600 mb-6 max-w-4xl">
+                    Explore important health topics and general medical information. These resources are designed to provide educational insights into various conditions and health considerations.
+                </p>
+
+                <div class="max-w-4xl space-y-8">
+                    <!-- Cancer Information -->
+                    <div id="cancer-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Cancer: Understanding, Prevention, and Treatment</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Cancer is a complex disease involving abnormal cell growth with the potential to spread to other parts of the body. Early detection and understanding of risk factors are crucial for prevention and effective treatment. This section provides general information on common types of cancer, diagnostic methods, and various treatment approaches.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/Cancer/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/Cancer/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Vascular Veins Information -->
+                    <div id="vascular-veins-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Vascular Veins: Causes, Symptoms, and Management</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Vascular vein conditions, such as varicose veins and spider veins, arise when veins become enlarged, dilated, and overfilled with blood. They can be painful and unsightly. This resource explores the common causes, symptoms, and various treatment options available for managing vascular vein issues, from lifestyle changes to medical procedures.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/vascularveins/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/vascularveins/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Blood Pressure Information -->
+                    <div id="blood-pressure-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Blood Pressure: Maintaining Healthy Levels</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Blood pressure is the force of your blood pushing against the walls of your arteries. High blood pressure (hypertension) often has no symptoms but can lead to serious health problems. This section explains what blood pressure is, why it's important, and strategies for maintaining healthy levels through diet, exercise, and medical management.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/BloodPressure/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/BloodPressure/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Healthy Shaadi / Pre-Marital Health Check Information -->
+                    <div id="healthy-shaadi-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Pre-Marital Health Check: Essential Blood Tests for a Healthy Future</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            A pre-marital health check, sometimes referred to as a "Healthy Shaadi" check, involves essential blood tests to identify potential health risks before marriage. These tests can help prevent the transmission of certain diseases and identify genetic compatibilities, ensuring a healthy future for both partners and their prospective children.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/HealthyShaadi/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/HealthyShaadi/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Diabetes Information -->
+                    <div id="diabetes-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Diabetes: Management and Living Well</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Diabetes is a chronic condition that affects how your body turns food into energy. Understanding diabetes, its types, and effective management strategies is vital for living a healthy life. This section covers key aspects of diabetes care, including diet, exercise, medication, and lifestyle adjustments.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/Diabetes/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/Diabetes/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Breast Cancer Information -->
+                    <div id="breast-cancer-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Breast Cancer: Awareness, Early Detection, and Support</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Breast cancer is a disease in which cells in the breast grow out of control. Awareness, early detection through self-exams and mammograms, and timely medical intervention are critical. This resource aims to provide information on breast cancer symptoms, risk factors, screening guidelines, and available treatments.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/breastcancer/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/breastcancer/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Tumor Information -->
+                    <div id="tumor-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Tumor: Types, Diagnosis, and Outlook</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            A tumor is an abnormal mass of tissue that forms when cells grow and divide more than they should or do not die when they should. Tumors can be benign (non-cancerous) or malignant (cancerous). This section provides an overview of different tumor types, diagnostic methods, and the general approaches to their assessment and management.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/tumor/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/tumor/</a>)
+                            </em>
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Data for services offered, categorized for filtering
+        const servicesData = [
+            { category: 'General Surgery', name: 'Breast Tumor Surgery' },
+            { category: 'General Surgery', name: 'Hysteroscopy' },
+            { category: 'General Surgery', name: 'Ovarian Cyst Removal' },
+            { category: 'General Surgery', name: 'Hysterectomy' },
+            { category: 'General Surgery', name: 'Surgery of the Penis' },
+            { category: 'Proctology', name: 'Anal Fissure Surgery' },
+            { category: 'Proctology', name: 'Laser Piles Removal' },
+            { category: 'Proctology', name: 'Piles, Fissure, Fistula' },
+            { category: 'Gastrointestinal', name: 'Vomiting Treatment' },
+            { category: 'Gastrointestinal', name: 'Gastric Problems' },
+            { category: 'Gastrointestinal', name: 'GERD Management' },
+            { category: 'Gastrointestinal', name: 'Stoma Care' },
+            { category: 'Gastrointestinal', name: 'Blood in Stool Treatment' },
+            { category: 'Gastrointestinal', name: 'Hepatitis (A-E) Mgmt' },
+            { category: 'Gastrointestinal', name: 'Diarrhea Treatment' },
+            { category: 'Endocrine', name: 'Diabetic Neuropathy' },
+            { category: 'Endocrine', name: 'Type 1 & 2 Diabetes Mgmt' },
+            { category: 'Endocrine', name: 'Thyroid Disorders' },
+            { category: 'Endocrine', name: 'Vitamin Deficiencies' },
+            { category: 'Urology', name: 'Kidney Problems' },
+            { category: 'Urology', name: 'Kidney Stones' },
+            { category: 'Urology', name: 'Nephrotic Syndrome' },
+            { category: 'Facilities', name: 'OPD Management' },
+            { category: 'Facilities', name: 'Intensive Care Unit (ICU)' },
+            { category: 'Facilities', name: '24x7 Ambulance' },
+            { category: 'Facilities', name: 'Emergency Services' },
+        ];
+
+        // Get DOM elements for services section
+        const servicesContainer = document.getElementById('services-container');
+        const buttonsContainer = servicesContainer.querySelector('.flex-wrap');
+        const servicesList = document.getElementById('services-list');
+
+        // Extract unique categories and add 'All' for filtering
+        const categories = ['All', ...new Set(servicesData.map(s => s.category))];
+
+        // Create and append category filter buttons
+        categories.forEach(category => {
+            const button = document.createElement('button');
+            button.textContent = category;
+            button.className = 'service-btn-inactive px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-300';
+            // Set 'All' as active by default
+            if (category === 'All') {
+                button.classList.add('service-btn-active');
+                button.classList.remove('service-btn-inactive');
+            }
+            button.dataset.category = category; // Store category in data attribute
+            buttonsContainer.appendChild(button);
+        });
+        
+        // Function to render services based on the selected filter
+        const renderServices = (filter) => {
+            servicesList.innerHTML = ''; // Clear current services
+            const filteredServices = filter === 'All' ? servicesData : servicesData.filter(s => s.category === filter);
+            filteredServices.forEach(service => {
+                const item = document.createElement('div');
+                item.className = 'bg-teal-50 p-3 rounded-lg text-center fade-in'; // Apply fade-in animation
+                item.innerHTML = `<p class="font-medium text-teal-900 text-sm">${service.name}</p>`;
+                servicesList.appendChild(item);
+            });
+        };
+
+        // Add event listener to category buttons for filtering
+        buttonsContainer.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                // Remove active class from previously active button
+                document.querySelectorAll('.service-btn-active').forEach(btn => {
+                    btn.classList.remove('service-btn-active');
+                    btn.classList.add('service-btn-inactive');
+                });
+                // Add active class to the clicked button
+                e.target.classList.add('service-btn-active');
+                e.target.classList.remove('service-btn-inactive');
+                // Render services for the selected category
+                renderServices(e.target.dataset.category);
+            }
+        });
+
+        // Initial render of all services
+        renderServices('All');
+
+        // Data for the Chart.js ratings chart
+        const ratingsData = {
+            labels: ['Justdial (Dr. Sinha)', 'Lybrate', 'Justdial (Hospital Avg)'],
+            datasets: [{
+                label: 'Rating (out of 5)',
+                data: [5.0, 4.3, 4.5],
+                backgroundColor: ['#0d9488', '#14b8a6', '#5eead4'], // Teal color palette
+                borderColor: ['#047857', '#0f766e', '#115e59'],
+                borderWidth: 1,
+                borderRadius: 5 // Rounded bars
+            }]
+        };
+
+        // Initialize and configure Chart.js
+        const ctx = document.getElementById('ratingsChart').getContext('2d');
+        const ratingsChart = new Chart(ctx, {
+            type: 'bar', // Bar chart type
+            data: ratingsData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Allows the chart to fill its container
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        max: 5, // Max rating is 5
+                        grid: { color: '#e2e8f0' } // Light gray grid lines
+                    },
+                    x: { grid: { display: false } } // No vertical grid lines
+                },
+                plugins: {
+                    legend: { display: false }, // Hide legend as there's only one dataset
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(1) + ' / 5'; // Format tooltip label
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Add functionality to "Copy" buttons
+        document.querySelectorAll('[data-copy]').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.dataset.copy;
+                const textToCopy = document.getElementById(id).innerText;
+                // Create a temporary input element to hold the text
+                const tempInput = document.createElement('input');
+                document.body.appendChild(tempInput);
+                tempInput.value = textToCopy;
+                tempInput.select(); // Select the text
+                document.execCommand('copy'); // Execute copy command
+                document.body.removeChild(tempInput); // Remove temporary input
+                
+                // Provide visual feedback to the user
+                const originalText = button.innerText;
+                button.innerText = 'Copied!';
+                setTimeout(() => { button.innerText = originalText; }, 1500); // Revert button text after 1.5 seconds
+            });
+        });
+
+        // Add functionality to accordion headers for recommendations section
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling; // Get the content panel
+                const icon = header.querySelector('span:last-child'); // Get the +/x icon
+                const isVisible = !content.classList.contains('hidden'); // Check if content is currently visible
+                
+                content.classList.toggle('hidden'); // Toggle visibility
+                // Animate the icon based on visibility
+                if (isVisible) {
+                    icon.style.transform = 'rotate(0deg)';
+                    icon.textContent = '+';
+                } else {
+                    icon.style.transform = 'rotate(45deg)';
+                    icon.textContent = '×';
+                }
+            });
+        });
+
+        // Mobile menu toggle functionality
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileNav = document.getElementById('mobile-nav');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('hidden'); // Toggle visibility of mobile nav
+        });
+
+        // Close mobile menu when a navigation link is clicked
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                // Check if mobileNav is currently visible (not hidden by display:none)
+                if(mobileNav.offsetParent !== null) { 
+                    mobileNav.classList.add('hidden'); // Hide mobile nav
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
