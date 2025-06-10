@@ -62,7 +62,7 @@
     <div class="flex min-h-screen">
         <!-- Desktop Sidebar Navigation -->
         <aside class="w-64 bg-teal-800 text-white p-6 hidden lg:flex flex-col fixed h-full">
-            <h1 class="text-2xl font-bold mb-8">Dr. Anoop Lal Sinha</h1> <!-- Changed from Dr. Anoop L. Sinha -->
+            <h1 class="text-2xl font-bold mb-8">Dr. Anoop Lal Sinha</h1> 
             <nav id="desktop-nav" class="flex flex-col space-y-4">
                 <a href="#overview" class="p-2 rounded hover:bg-teal-700 transition-colors">Overview</a>
                 <a href="#services" class="p-2 rounded hover:bg-teal-700 transition-colors">Medical Services</a>
@@ -73,12 +73,18 @@
                 <!-- Health Resources section for desktop -->
                 <h3 class="text-lg font-semibold text-teal-200 mt-4 mb-2">Health Resources</h3>
                 <a href="#cancer-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Cancer</a>
+                <a href="#breast-tumor-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Breast Tumor</a>
                 <a href="#vascular-veins-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Vascular Veins</a>
                 <a href="#blood-pressure-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Blood Pressure</a>
                 <a href="#healthy-shaadi-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Pre-Marital Health Check</a>
                 <a href="#diabetes-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Diabetes</a>
                 <a href="#breast-cancer-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Breast Cancer</a>
                 <a href="#tumor-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Tumor</a>
+                <a href="#hernia-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Hernia</a>
+                <a href="#hysterectomy-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Hysterectomy</a>
+                <a href="#appendix-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Appendix</a>
+                <a href="#kidney-stone-info" class="p-2 rounded hover:bg-teal-700 transition-colors">Kidney Stone</a>
+                <a href="#nsip-info" class="p-2 rounded hover:bg-teal-700 transition-colors">NSIP (Lung Disease)</a>
                 <!-- New Contact Info link -->
                 <a href="#contact-footer" class="p-2 rounded hover:bg-teal-700 transition-colors mt-4">Contact Information</a>
             </nav>
@@ -87,7 +93,7 @@
         <!-- Mobile Header and Navigation -->
         <div class="lg:hidden w-full bg-teal-800 text-white p-4 fixed top-0 left-0 z-50 shadow-md">
             <div class="flex justify-between items-center">
-                <h1 class="text-xl font-bold">Dr. Anoop Lal Sinha</h1> <!-- Changed from Dr. Anoop L. Sinha -->
+                <h1 class="text-xl font-bold">Dr. Anoop Lal Sinha</h1> 
                 <button id="mobile-menu-btn" class="p-2 focus:outline-none">
                     <span class="block w-6 h-0.5 bg-white mb-1"></span>
                     <span class="block w-6 h-0.5 bg-white mb-1"></span>
@@ -104,12 +110,18 @@
                 <!-- Health Resources section and sub-links for mobile -->
                 <h3 class="text-base font-semibold text-teal-200 mt-4 pt-2 border-t border-teal-700">Health Resources</h3>
                 <a href="#cancer-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Cancer</a>
+                <a href="#breast-tumor-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Breast Tumor</a>
                 <a href="#vascular-veins-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Vascular Veins</a>
                 <a href="#blood-pressure-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Blood Pressure</a>
                 <a href="#healthy-shaadi-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Pre-Marital Health Check</a>
                 <a href="#diabetes-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Diabetes</a>
                 <a href="#breast-cancer-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Breast Cancer</a>
                 <a href="#tumor-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Tumor</a>
+                <a href="#hernia-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Hernia</a>
+                <a href="#hysterectomy-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Hysterectomy</a>
+                <a href="#appendix-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Appendix</a>
+                <a href="#kidney-stone-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">Kidney Stone</a>
+                <a href="#nsip-info" class="block p-2 rounded hover:bg-teal-700 transition-colors">NSIP (Lung Disease)</a>
                 <!-- New Contact Info link -->
                 <a href="#contact-footer" class="block p-2 rounded hover:bg-teal-700 transition-colors mt-4">Contact Information</a>
             </nav>
@@ -223,12 +235,13 @@
                 </p>
                 <div class="max-w-4xl bg-white p-6 rounded-lg shadow-sm grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <h3 class="text-xl font-bold text-teal-900 mb-4">Contact & Location</h3>
-                        <p class="font-semibold">Vishal Hospital</p>
+                        <h3 class="text-xl font-bold text-teal-900 mb-4">Contact & Location (Rajkot Branch)</h3>
+                        <p class="font-semibold">Vishal Hospital, Rajkot</p>
                         <p class="text-gray-700">Kailashwadi Main Road, Opp. Taluka Police Choki, Junction Plot, Rajkot, Gujarat 360001</p>
                         <div class="mt-4 space-y-2">
-                            <p class="flex items-center"><strong>Mobile:</strong> <span id="phone" class="text-gray-700">9228105245</span> <button data-copy="phone" class="ml-2 text-xs bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">Copy</button></p>
-                            <p class="flex items-center"><strong>Email:</strong> <span id="email" class="text-gray-700">vishalhospital@hotmail.co.in</span> <button data-copy="email" class="ml-2 text-xs bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">Copy</button></p>
+                            <p class="flex items-center"><strong>Mobile:</strong> <span id="phone-rajkot">9228105245</span> <button data-copy="phone-rajkot" class="ml-2 text-xs bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">Copy</button></p>
+                            <p><strong>Landline Number:</strong> 0281-2450408</p>
+                            <p class="flex items-center"><strong>Email:</strong> <span id="email">vishalhospital@hotmail.co.in</span> <button data-copy="email" class="ml-2 text-xs bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">Copy</button></p>
                             <p class="flex items-center"><strong>Website:</strong> <a href="http://vishalhospitalrajkot.github.io" target="_blank" class="text-teal-700 hover:underline">vishalhospitalrajkot.github.io</a></p>
                         </div>
                     </div>
@@ -319,6 +332,19 @@
                         </p>
                     </div>
 
+                    <!-- Breast Tumor Information (New) -->
+                    <div id="breast-tumor-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Breast Tumor: Types, Diagnosis, and Management</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Breast tumors can be benign (non-cancerous) or malignant (cancerous). Understanding the different types, proper diagnostic procedures like mammograms and biopsies, and available management options is crucial for early intervention and effective care. This section provides general information on breast tumors.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/breasttumor/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/breasttumor/</a>)
+                            </em>
+                        </p>
+                    </div>
+
                     <!-- Vascular Veins Information -->
                     <div id="vascular-veins-info" class="bg-white p-6 rounded-lg shadow-sm">
                         <h3 class="text-xl font-bold text-teal-900 mb-2">Vascular Veins: Causes, Symptoms, and Management</h3>
@@ -396,28 +422,115 @@
                             </em>
                         </p>
                     </div>
+
+                    <!-- Hernia Information (New) -->
+                    <div id="hernia-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Hernia: Causes, Symptoms, and Treatment Options</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            A hernia occurs when an organ or fatty tissue squeezes through a weak spot in a surrounding muscle or connective tissue. This common condition can cause discomfort and may require surgical intervention. This section provides an overview of different types of hernias, their symptoms, and various treatment options available.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/hernia/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/hernia/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Hysterectomy Information (New) -->
+                    <div id="hysterectomy-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Hysterectomy: Understanding the Procedure and Recovery</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            A hysterectomy is a surgical procedure to remove the uterus. It may be performed for various reasons, including fibroids, endometriosis, heavy bleeding, or cancer. This section offers general information about the different types of hysterectomies, what to expect during the procedure, and the recovery process.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/hysterectomy/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/hysterectomy/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Appendix Information (New) -->
+                    <div id="appendix-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Appendix and Appendicitis: Symptoms and Treatment</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Appendicitis is an inflammation of the appendix, a finger-shaped pouch that projects from your colon. It is a medical emergency that almost always requires prompt surgery to remove the appendix. This section covers common symptoms of appendicitis and why timely medical attention is crucial.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/Appendix/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/Appendix/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Kidney Stone Information (New) -->
+                    <div id="kidney-stone-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Kidney Stones: Causes, Prevention, and Removal</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Kidney stones are hard deposits made of minerals and salt that form inside your kidneys. They can cause severe pain when they move through your urinary tract. This section provides an overview of the causes of kidney stones, strategies for prevention, and various medical and surgical options for their removal.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/KidneyStone/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/KidneyStone/</a>)
+                            </em>
+                        </p>
+                    </div>
+
+                    <!-- Non-Specific Interstitial Pneumonia (NSIP) Information (New) -->
+                    <div id="nsip-info" class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">Non-Specific Interstitial Pneumonia (NSIP): An Overview</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Non-Specific Interstitial Pneumonia (NSIP) is a type of interstitial lung disease characterized by inflammation and fibrosis of the lung tissue. Understanding its symptoms, diagnosis, and management is important for those affected. This section offers general information about NSIP and its implications for lung health.
+                            <br><br>
+                            <em class="text-sm text-gray-500">
+                                (Content for this section can be populated from the provided source:
+                                <a href="https://vishalhospitalrajkot.github.io/NSIP/" target="_blank" class="text-teal-700 hover:underline">https://vishalhospitalrajkot.github.io/NSIP/</a>)
+                            </em>
+                        </p>
+                    </div>
                 </div>
             </section>
 
             ---
-            <!-- New Contact Information Section at the very bottom -->
+            <!-- Updated Contact Information Section at the very bottom -->
             <section id="contact-footer" class="py-10 bg-teal-900 text-white rounded-lg shadow-md fade-in">
                 <div class="max-w-4xl mx-auto px-6 md:px-10">
                     <h2 class="text-3xl font-bold mb-6 text-center text-teal-100">Contact Information</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
-                            <h3 class="text-xl font-bold text-teal-200 mb-4">Vishal Hospital</h3>
+                            <h3 class="text-xl font-bold text-teal-200 mb-4">Vishal Hospital, Rajkot</h3>
                             <address class="not-italic text-teal-50 space-y-2">
                                 <p><strong>Address:</strong> Vishal Hospital, Kailashwadi Main Road, opposite Taluka Police Choki, Junction Plot, Rajkot, Gujarat 360001</p>
                                 <p class="flex items-center">
-                                    <strong>Mobile Number:</strong> <span id="hospital-mobile">9228105245</span> 
-                                    <button data-copy="hospital-mobile" class="ml-2 text-xs bg-teal-700 px-2 py-1 rounded hover:bg-teal-600 text-white">Copy</button>
+                                    <strong>Mobile Number:</strong> <span id="hospital-mobile-rajkot">9228105245</span> 
+                                    <button data-copy="hospital-mobile-rajkot" class="ml-2 text-xs bg-teal-700 px-2 py-1 rounded hover:bg-teal-600 text-white">Copy</button>
                                 </p>
                                 <p><strong>Landline Number:</strong> 0281-2450408</p>
                                 <p><strong>Website:</strong> <a href="https://vishalhospitalrajkot.github.io/" target="_blank" class="text-teal-200 hover:underline">vishalhospitalrajkot.github.io</a></p>
                             </address>
                         </div>
                         <div>
+                            <h3 class="text-xl font-bold text-teal-200 mb-4">Vishal Hospital, Bodhgaya</h3>
+                            <address class="not-italic text-teal-50 space-y-2">
+                                <p><strong>Address:</strong> Vishal Hospital, Gaya-Dobhi Rd, Musatpura, Bihar 823004</p>
+                                <p class="flex items-center">
+                                    <strong>Mobile Number:</strong> <span id="hospital-mobile-bodhgaya">9228105245</span> 
+                                    <button data-copy="hospital-mobile-bodhgaya" class="ml-2 text-xs bg-teal-700 px-2 py-1 rounded hover:bg-teal-600 text-white">Copy</button>
+                                </p>
+                                <!-- No landline number provided for Bodhgaya branch -->
+                                <p><strong>Website:</strong> <a href="https://vishalhospitalrajkot.github.io/vishalhospitalbodhgaya/" target="_blank" class="text-teal-200 hover:underline">vishalhospitalrajkot.github.io/vishalhospitalbodhgaya/</a></p>
+                            </address>
+                        </div>
+                        <div class="md:col-span-2"> <!-- Span both columns for the banquet hall for better layout -->
+                            <h3 class="text-xl font-bold text-teal-200 mb-4">Dr. Anoop Lal Sinha (Individual Profile)</h3>
+                            <address class="not-italic text-teal-50 space-y-2">
+                                <p class="flex items-center">
+                                    <strong>Mobile Number:</strong> <span id="dr-sinha-mobile">9228105245</span> 
+                                    <button data-copy="dr-sinha-mobile" class="ml-2 text-xs bg-teal-700 px-2 py-1 rounded hover:bg-teal-600 text-white">Copy</button>
+                                </p>
+                                <p><strong>Website:</strong> <a href="https://vishalhospitalrajkot.github.io/Dr.AnoopLalSinha/" target="_blank" class="text-teal-200 hover:underline">vishalhospitalrajkot.github.io/Dr.AnoopLalSinha/</a></p>
+                            </address>
+                        </div>
+                         <div>
                             <h3 class="text-xl font-bold text-teal-200 mb-4">Vishal Banquet Hall</h3>
                             <address class="not-italic text-teal-50 space-y-2">
                                 <p><strong>Address:</strong> Vishal Banquet Hall, Gaya-Dobhi Rd, Musatpura, Bihar 823004</p>
